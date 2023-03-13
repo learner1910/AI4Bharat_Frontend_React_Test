@@ -21,50 +21,182 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<--    Getting Started
+       First, let's create a new React app using create-toshini
+       cd toshini.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    Next, let's install the dependencies we'll need for this project.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    Step 2: Installing dependencies
+    
+     Now we need to install the following dependencies for our project:
 
-### `npm run eject`
+`axios`: to make API calls
+`redux`: for state management 
+`react- redux`: to connect React components with the Redux store
+`redux - thunk`: middleware for Redux to handle asynchronous actions 
+`styled - components`: for styling React components 
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+To install these dependencies,run the following command:
+`npm install axios react-bootstrap react-icons react-redux redux`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    Now that we have our dependencies installed, let's start working on the tasks
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+#
+      Task 1: Make a GET API call 
+#
+      The first task is to make a GET API 
+call to https://jsonplaceholder.typicode.com/users. Here's how you can do it using React:
 
-## Learn More
+    `import axios from 'axios';
+    export const getUsers = async () => {
+     try {
+    const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }};`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Note:   The above code is only for GET api call.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    <--------------------------App.js------------------------------------------------------>
 
-### Code Splitting
+Let's go over the code step by step:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1.We import the necessary libraries, and declare two state variables using the useState hook. `users` will hold the list of users fetched from the API, while `selectedUser` will hold the user object that the user clicks on.
 
-### Analyzing the Bundle Size
+2.We use the useEffect hook to make a GET API call to https://jsonplaceholder.typicode.com/users and update the `users` state variable with the response data.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+3.We define a `handleUserClick` function that updates the `selectedUser` state variable when the user clicks on a row in the table.
 
-### Making a Progressive Web App
+4.We define a `handleCloseModal` function that resets the `selectedUser` state variable when the user clicks on the Close button in the modal or clicks outside the modal.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+5.We render a table with the list of users, and attach an onClick event handler to each row that calls the `handleUserClick` function.
 
-### Advanced Configuration
+6.We render a modal that displays the selected user's information. We use the `show` prop to show or hide the modal based on whether `selectedUser` is null or not, and the  `onHide` prop
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+In this code, we are using the `useEffect` hook to make the API call when the component mounts.
+The API response is in JSON  format, so we are parsing it using the `json()` method. The `setUsers` 
+function is used to update the state of the component with the API response.
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+# 
+Task 2: Rendering the response
+#
+The next task is to render the response in a tabular form, displaying the
+`id`, `name`, `username`, and `email` fields. 
+Here's how you can do it:
 
-### `npm run build` fails to minify
+In this code, we are using the `table` element to display the data in a tabular form. The 
+`thead` and `tbody` elements are used  to  define the header and body of the table,
+respectively. We are using the `map` function to iterate over the `users` array and display
+each user's data in a row of the table.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+#
+Task 3: Creating an interactive modal popup
+#
+The final task is to create an interactive modal popup that displays additional information
+about a user when the user clicks on a  row in the table. Here's how you can do it:
+
+-->
+
+
+
+<------------------------------------------------------------------------------------------------------------>
+Step 1: Importing Dependencies
+
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Table, Modal, Button } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUsers } from './redux/actions';
+
+Here we are importing necessary dependencies like React, axios, react-bootstrap, and Redux dependencies like useDispatch and useSelector. We are also importing the `fetchUsers` action from the actions file.
+
+
+Step 2: Creating a Functional Component
+
+function App() {
+  const [show, setShow] = useState(false);
+  const [user, setUser] = useState({});
+
+  const dispatch = useDispatch();
+  const users = useSelector(state => state.users);
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
+Here, we are creating a functional component called `App` `using` the `function` keyword.
+Inside the component, we are creating two state variables `show` and `user` using the
+useState hook. We are also using `useDispatch` and `useSelector` hooks provided by Redux 
+to dispatch actions and access state respectively. The users variable holds the state of 
+the users data which we get from the Redux store.
+
+We also have an `useEffect` hook which runs when the component is mounted. Inside this,
+we are dispatching the `fetchUsers` action which makes an API call to the specified 
+endpoint to get user data.
+
+
+Step 3: Creating Table Header and Body
+
+  const renderTableHeader = () => {
+    let header = Object.keys(users[0]);
+    return header.map((key, index) => {
+      return <th key={index}>{key.toUpperCase()}</th>
+    })
+  }
+
+  const renderTableData = () => {
+    return users.map((user) => {
+      const { id, name, username, email } = user;
+      return (
+        <tr key={id} onClick={() => handleShow(user)}>
+          <td>{id}</td>
+          <td>{name}</td>
+          <td>{username}</td>
+          <td>{email}</td>
+        </tr>
+      )
+    })
+  }
+
+
+Here, we have created two functions: `renderTableHeader` and `renderTableData`.
+The `renderTableHeader` function renders the table header row by getting the
+keys of the first `user` object in the users array and returning table headers
+with the key names.
+
+The `renderTableData` function renders the table data by looping through each `user` 
+object in the users array and returning a table row for each object. It also sets the `onClick`
+handler to the handleShow function which is called when a user clicks on a row.
+
+
+Step 4: Creating a Modal Popup
+
+`handleClose` is a function that sets the `show` state to false when called,
+ which is used to close the modal when the user clicks the close button or outside the modal.
+
+`handleShow` is a function that takes a `user` object as an argument and sets the `show` state
+ to true and the `user` state to the selected user, which is used to display the detailed
+information in the modal.
+
+The component returns a `div` with the class name `App`, which contains a table and a modal.
+The table is created using the `Table` component from react-bootstrap and includes a header 
+row and a body with data rows rendered using the `renderTableData` function. The header row 
+is rendered using the `renderTableHeader` function.
+
+The `modal` is created using the Modal component from react-bootstrap and is conditionally 
+rendered based on the `show` state. The `onHide` prop is set to the `handleClose` function 
+to close the modal when the user clicks the close button. The modal contains a header with 
+the title "User Info" and a body with detailed information about the selected user, including 
+their address, phone, and website.
+
+In the modal body, the user's address is displayed using string interpolation to concatenate the
+`street`, `city`, and `zipcode` properties of the `user.address` object. The `phone` and `website`
+are displayed using the phone and website properties of the `user` object, respectively. The `strong` 
+tag is used to emphasize the labels for each piece of information.
+
+<------------------------------------------------------------------------------------------------------------>
